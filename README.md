@@ -125,7 +125,7 @@ Array : *packages_archlinux*
 
 Example:
 ```bash
-packages_fedora=(
+packages_archlinux=(
 	"package1"
 	"package2"
 	"package3"
