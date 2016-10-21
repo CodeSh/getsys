@@ -1,5 +1,5 @@
 #!/bin/bash
-OS=$(v -si)
+OS=$(lsb_release -si)
 
 DEBIAN_DIBS=(
 	"debian"
