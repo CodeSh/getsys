@@ -112,3 +112,7 @@ elif [ "$IS_ARCHLINUX" ]; then
   done
 fi
 fi
+
+if [ "$action" == "end" ]; then
+  echo "Nothing to install"
+fi
