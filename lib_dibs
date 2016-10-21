@@ -6,6 +6,7 @@ DEBIAN_DIBS=(
 	"ubuntu"
 	"linuxmint"
 	"canaima"
+	"mint"
 	)
 	
 FEDORA_DIBS=(
@@ -17,8 +18,11 @@ FEDORA_DIBS=(
 SUSELINUX_DIBS=(
 	"suse linux"
 	)
-
-# 	"archlinux"
+	
+ARCHLINUX_DIBS=(
+ 	"archlinux"
+	"arch"
+	)
 
 dib_debian() {
 for all in ${!DEBIAN_DIBS[@]}; do
@@ -47,9 +51,19 @@ for all in ${!FEDORA_DIBS[@]}; do
 done
 }
 
+dib_archlinux() {
+for all in ${!ARCHLINUX_DIBS[@]}; do
+	dib=$(echo ${OS} | tr [:upper:] [:lower:])
+	if [ "${dib}" == "${ARCHLINUX_DIBS[$all]}" ]; then
+		echo ${dib}
+	fi
+done
+}
+
 IS_DEBIAN=$(dib_debian)
 IS_FEDORA=$(dib_fedora)
 IS_SUSELINUX=$(dib_suselinux)
+IS_ARCHLINUX=$(dib_archlinux)
 
 if [ "$action" == "install" ]; then
 
@@ -67,6 +81,11 @@ elif [ "$IS_SUSELINUX" ]; then
   for package in ${!packages_suselinux[@]}; do
 		sudo aptitude install ${packages_suselinux[$package]} -y
   done
+  
+elif [ "$IS_ARCHLINUX" ]; then
+  for package in ${!packages_archlinux[@]}; do
+		sudo pacman -S ${packages_archlinux[$package]}
+  done 
 fi
 fi
 
@@ -86,6 +105,10 @@ elif [ "$IS_SUSELINUX" ]; then
   for package in ${!packages_suselinux[@]}; do
 		sudo aptitude remove ${packages_suselinux[$package]} -y
   done
+  
+elif [ "$IS_ARCHLINUX" ]; then
+  for package in ${!packages_archlinux[@]}; do
+		sudo pacman -R ${packages_archlinux[$package]}
+  done
 fi
 fi
-
