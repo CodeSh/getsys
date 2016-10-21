@@ -15,6 +15,7 @@ wget https://raw.githubusercontent.com/CodeSh/detect-package-by-system/master/li
 Examples:
 
 ```bash
+sudo=true # This isn't required if you dont need sudo privileges
 action=install
 
 packages_debian=(
