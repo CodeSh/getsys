@@ -132,3 +132,45 @@ packages_archlinux=(
 	"andmore"
 	)
 ```	
+
+## Others methods
+I've added some functions to any script, helping at `autoremove`, `update` and `upgrade`
+Debian/Ubuntu or derivatives:
+```
+update_packages_debian
+upgrade_packages_debian
+autoremove_packages_debian
+```
+-
+
+Fedora or derivatives:
+```
+update_packages_fedora
+upgrade_packages_fedora
+autoremove_packages_fedora
+```
+-
+
+SuseLinux or derivatives:
+```
+update_packages_suselinux
+upgrade_packages_suselinux
+autoremove_packages_suselinux
+```
+-
+
+Archlinux or derivatives:
+```
+update_packages_archlinux
+upgrade_packages_archlinux
+autoremove_packages_archlinux
+```
+You must add those functions then of `source lib_dibs`
+
+-
+
+Yeah. **This also will detect the system** :P
+
+If you have the function `update_packages_archlinux` and the script will be run in ubuntu. The script will not do nothing!
+
+You can contribute in this proyect! I will read all the pullrequests or i will add your your dib if you need that! Just you must run this command: `lsb_release -is` and send me the reply!
