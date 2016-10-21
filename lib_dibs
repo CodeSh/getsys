@@ -114,5 +114,5 @@ fi
 fi
 
 if [ "$action" == "end" ]; then
-  echo "Nothing to install"
+  echo "Nothing to install or remove..."
 fi
