@@ -54,14 +54,23 @@ Example:
 ```bash
 action=remove
 ```
+-
+---
+Type: *end*
+	set the action to null
+	
+Exaple:
 
+```bash
+action=end
+```
 ------------
 
 ### list of packages
 
 Array : *packages_debian*
 
-	array with a list of packages to install in debian or others derivatives.
+	array with a list of packages to install/remove in debian or others derivatives.
 	
 Example:
 ```bash
@@ -78,7 +87,7 @@ packages_debian=(
 
 Array : *packages_fedora*
 
-	array with a list of packages to install in fedora or others derivatives.
+	array with a list of packages to install/remove in fedora or others derivatives.
 
 Example:
 ```bash
@@ -95,7 +104,7 @@ packages_fedora=(
 
 Array : *packages_suselinux*
 
-	array with a list of packages to install in suselinux or others derivatives.
+	array with a list of packages to install/remove in suselinux or others derivatives.
 
 Example:
 ```bash
@@ -106,4 +115,20 @@ packages_suselinux=(
 	"andmore"
 	)
 ```
-	
+
+-
+---
+
+Array : *packages_archlinux*
+
+	array with a list of packages to install/remove in archlinux or others derivatives.
+
+Example:
+```bash
+packages_fedora=(
+	"package1"
+	"package2"
+	"package3"
+	"andmore"
+	)
+```	
