@@ -8,17 +8,17 @@ DEBIAN_DIBS=(
 	"canaima"
 	"mint"
 	)
-	
+
 FEDORA_DIBS=(
 	"debian"
 	"ubuntu"
 	"asplinux"
 	)
-	
+
 SUSELINUX_DIBS=(
 	"suse linux"
 	)
-	
+
 ARCHLINUX_DIBS=(
  	"archlinux"
 	"arch"
@@ -72,20 +72,20 @@ IS_ARCHLINUX=$(dib_archlinux)
 
 # Debian/Ubuntu or derivatives functions
 function update_packages_debian() { if [ "$IS_DEBIAN" ]; then $prefix apt-get update -y; fi }
-function upgrade_packages_debian() { if [ "$IS_DEBIAN" ]; then $prefix apt-get upgrade -y; fi}
-function autoremove_packages_debian() { if [ "$IS_DEBIAN" ]; then $prefix apt-get autoremove -y; fi}
+function upgrade_packages_debian() { if [ "$IS_DEBIAN" ]; then $prefix apt-get upgrade -y; fi }
+function autoremove_packages_debian() { if [ "$IS_DEBIAN" ]; then $prefix apt-get autoremove -y; fi }
 # Fedora or drivatives functions
 function update_packages_debian() { if [ "$IS_FEDORA" ]; then $prefix dnf update -y; fi }
-function upgrade_packages_debian() { if [ "$IS_FEDORA" ]; then $prefix dnf upgrade -y; fi}
-function autoremove_packages_debian() { if [ "$IS_FEDORA" ]; then $prefix dnf autoremove -y; fi}
+function upgrade_packages_debian() { if [ "$IS_FEDORA" ]; then $prefix dnf upgrade -y; fi }
+function autoremove_packages_debian() { if [ "$IS_FEDORA" ]; then $prefix dnf autoremove -y; fi }
 # SuseLinux or drivatives functions
 function update_packages_debian() { if [ "$IS_SUSELINUX" ]; then $prefix aptitude update -y; fi }
-function upgrade_packages_debian() { if [ "$IS_SUSELINUX" ]; then $prefix aptitude safe-upgrade -y; fi}
-function autoremove_packages_debian() { if [ "$IS_SUSELINUX" ]; then $prefix aptitude full-upgrade -y; fi}
+function upgrade_packages_debian() { if [ "$IS_SUSELINUX" ]; then $prefix aptitude safe-upgrade -y; fi }
+function autoremove_packages_debian() { if [ "$IS_SUSELINUX" ]; then $prefix aptitude full-upgrade -y; fi }
 # ArchLinux or derivatives functions
-function update_packages_archlinux() { if [ "$IS_ARCHLINUX" ]; then $prefix pacman -Sy; fi}
-function upgrade_packages_archlinux() { if [ "$IS_ARCHLINUX" ]; then $prefix pacman -Syu $(pacman -Qq) -Sy; fi}
-function autoremove_packages_archlinux() { if [ "$IS_ARCHLINUX" ]; then $prefix pacman -R $(pacman -Qdtq) -Sy; fi}
+function update_packages_archlinux() { if [ "$IS_ARCHLINUX" ]; then $prefix pacman -Sy; fi }
+function upgrade_packages_archlinux() { if [ "$IS_ARCHLINUX" ]; then $prefix pacman -Syu $(pacman -Qq) -Sy; fi }
+function autoremove_packages_archlinux() { if [ "$IS_ARCHLINUX" ]; then $prefix pacman -R $(pacman -Qdtq) -Sy; fi }
 
 if [ "$action" == "install" ]; then
 
