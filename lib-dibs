@@ -1,10 +1,21 @@
 #!/bin/bash
-OS=$(lsb_release -si)
+OS=$(v -si)
 
 DEBIAN_DIBS=(
 	"debian"
 	"ubuntu"
 	"mint"
+	"archlinux"
+	)
+	
+FEDORA_DIBS=(
+	"debian"
+	"ubuntu"
+	"asplinux"
+	)
+	
+SUSELINUX_DIBS=(
+	"suse linux"
 	)
 
 dib_debian() {
@@ -16,11 +27,31 @@ for all in ${!DEBIAN_DIBS[@]}; do
 done
 }
 
-ES_DEBIAN=$(dib_debian)
+dib_suselinux() {
+for all in ${!SUSELINUX_DIBS[@]}; do
+	dib=$(echo ${OS} | tr [:upper:] [:lower:])
+	if [ "${dib}" == "${SUSELINUX_DIBS[$all]}" ]; then
+		echo ${dib}
+	fi
+done
+}
+
+dib_fedora() {
+for all in ${!FEDORA_DIBS[@]}; do
+	dib=$(echo ${OS} | tr [:upper:] [:lower:])
+	if [ "${dib}" == "${FEDORA_DIBS[$all]}" ]; then
+		echo ${dib}
+	fi
+done
+}
+
+IS_DEBIAN=$(dib_debian)
+IS_FEDORA=$(dib_fedora)
+IS_SUSELINUX=$(dib_suselinux)
 
 echo "Instalando dependecias de "${OS}" para Latino..."
 
-if [ "$ES_DEBIAN" ]; then
+if [ "$IS_DEBIAN" ]; then
   sudo apt-get update -qq -y
   sudo apt-get install bison -y
   sudo apt-get install flex -y
@@ -31,7 +62,8 @@ if [ "$ES_DEBIAN" ]; then
   sudo apt-get install libcurl4-openssl-dev -y
   sudo apt-get install curl -y
   sudo apt-get autoremove -qq -y
-else
+  
+elif [ "$IS_FEDORA" ]; then
   sudo dnf update
   sudo dnf install bison
   sudo dnf install flex
@@ -44,4 +76,7 @@ else
   sudo dnf install kernel-devel
   sudo dnf install jsoncpp
   sudo dnf autoremove
+  
+elif [ "$IS_SUSELINUX" ]; then
+  sudo aptitude install *
 fi
