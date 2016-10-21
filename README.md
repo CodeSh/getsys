@@ -2,9 +2,15 @@
 
 This is a alpha repository (script bash) to get the system and install/remove any package detecting the system or dib.
 
-##¿Why use this?
+## ¿Why use this?
 
 If you have a script and the script require some packages maybe this will be your magic script!
+
+## Getting lib_dibs
+You need download lib_dibs by wget with:
+```bash
+wget https://raw.githubusercontent.com/CodeSh/detect-package-by-system/master/lib_dibs
+```
 
 Examples:
 
