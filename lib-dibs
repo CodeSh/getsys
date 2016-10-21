@@ -52,16 +52,11 @@ IS_SUSELINUX=$(dib_suselinux)
 echo "Instalando dependecias de "${OS}" para Latino..."
 
 if [ "$IS_DEBIAN" ]; then
-  sudo apt-get update -qq -y
-  sudo apt-get install bison -y
-  sudo apt-get install flex -y
-  sudo apt-get install build-essential -y
-  sudo apt-get install gcc -y
-  sudo apt-get install g++ -y
-  sudo apt-get install libjansson-dev -y
-  sudo apt-get install libcurl4-openssl-dev -y
-  sudo apt-get install curl -y
-  sudo apt-get autoremove -qq -y
+  for package in ${!packages_debian[@]}; do
+  		sudo apt-get update
+		sudo apt-get install ${packages_debian[$package]} -y
+		sudo apt-get upgrade -y
+  done
   
 elif [ "$IS_FEDORA" ]; then
   sudo dnf update
