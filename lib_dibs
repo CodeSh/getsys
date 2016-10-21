@@ -4,8 +4,8 @@ OS=$(lsb_release -si)
 DEBIAN_DIBS=(
 	"debian"
 	"ubuntu"
-	"mint"
-	"archlinux"
+	"linuxmint"
+	"canaima"
 	)
 	
 FEDORA_DIBS=(
@@ -17,6 +17,8 @@ FEDORA_DIBS=(
 SUSELINUX_DIBS=(
 	"suse linux"
 	)
+
+# 	"archlinux"
 
 dib_debian() {
 for all in ${!DEBIAN_DIBS[@]}; do
@@ -49,29 +51,41 @@ IS_DEBIAN=$(dib_debian)
 IS_FEDORA=$(dib_fedora)
 IS_SUSELINUX=$(dib_suselinux)
 
-echo "Instalando dependecias de "${OS}" para Latino..."
+if [ "$action" == "install" ]; then
 
 if [ "$IS_DEBIAN" ]; then
   for package in ${!packages_debian[@]}; do
-  		#sudo apt-get update
 		sudo apt-get install ${packages_debian[$package]} -y
-		#sudo apt-get upgrade -y
   done
   
 elif [ "$IS_FEDORA" ]; then
-  sudo dnf update
-  sudo dnf install bison
-  sudo dnf install flex
-  sudo dnf install build-essentials
-  sudo dnf install gcc
-  sudo dnf install g++
-  sudo dnf install libjansson-dev
-  sudo dnf install libcurl4-openssl-dev
-  sudo dnf install curl
-  sudo dnf install kernel-devel
-  sudo dnf install jsoncpp
-  sudo dnf autoremove
+  for package in ${!packages_fedora[@]}; do
+		sudo dnf install ${packages_fedora[$package]} -y
+  done
   
 elif [ "$IS_SUSELINUX" ]; then
-  sudo aptitude install *
+  for package in ${!packages_suselinux[@]}; do
+		sudo aptitude install ${packages_suselinux[$package]} -y
+  done
 fi
+fi
+
+if [ "$action" == "remove" ]; then
+
+if [ "$IS_DEBIAN" ]; then
+  for package in ${!packages_debian[@]}; do
+		sudo apt-get remove ${packages_debian[$package]} -y
+  done
+  
+elif [ "$IS_FEDORA" ]; then
+  for package in ${!packages_fedora[@]}; do
+		sudo dnf remove ${packages_fedora[$package]} -y
+  done
+  
+elif [ "$IS_SUSELINUX" ]; then
+  for package in ${!packages_suselinux[@]}; do
+		sudo aptitude remove ${packages_suselinux[$package]} -y
+  done
+fi
+fi
+
