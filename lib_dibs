@@ -28,7 +28,10 @@ ARCHLINUX_DIBS=(
 	"arch"
 	)
 
-if [ "$sudo" == true ]; then prefix=sudo; else unset prefix; fi
+if [ "$sudo" == true ]; then prefix=sudo; fi
+if [ ! "$update_packages" ] || [ ! "$upgrade_packages" ] || [ ! "$autoremove_packages" ] || [ ! "$sudo" ]; then
+	unset sudo update_packages upgrade_packages autoremove_packages
+fi
 
 dib_debian() {
 for all in ${!DEBIAN_DIBS[@]}; do
@@ -136,6 +139,9 @@ elif [ "$IS_ARCHLINUX" ]; then
 		$prefix pacman -R --noconfirm ${packages_archlinux[$package]}
   done
 fi
+if [ "$update_packages" == true ]; then update_packages_debian;update_packages_fedora;update_packages_suselinux;update_packages_archlinux; fi
+if [ "$upgrade_packages" == true ]; then upgrade_packages_debian;upgrade_packages_fedora;upgrade_packages_suselinux;upgrade_packages_archlinux; fi
+if [ "$autoremove_packages" == true ]; then autoremove_packages_debian;autoremove_packages_fedora;autoremove_packages_suselinux;autoremove_packages_archlinux; fi
 fi
 
 if [ "$action" == "end" ]; then
