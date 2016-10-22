@@ -1,5 +1,5 @@
 #!/bin/bash
-action=instal		# The packages will be installed.
+action=install		# The packages will be installed.
 sudo=true		# Require sudo privileges.
 update_packages=true	# Finishing the installation the repositories will be updated.
 
