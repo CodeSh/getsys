@@ -134,10 +134,38 @@ packages_archlinux=(
 	)
 ```	
 
+Array : *packages_all*
+
+	array with a list of packages to install/remove in archlinux : debian : suselinux : fedora and derivatives.
+
+Example:
+```bash
+packages_all=(
+	"package1"
+	"package2"
+	"package3"
+	"anymore"
+	)
+```	
+
 ## Others methods
 I've added some functions to any script, helping at `autoremove`, `update` and `upgrade`
-Debian/Ubuntu or derivatives:
+
+All systems:
+```bash
+update_packages=true
+upgrade_packages=true
+autoremove_packages=true
 ```
+
+This needs to be put in the first lines before than `source lib_dibs` and the list of packages.
+
+-
+
+Or you can select a system default and add a funcion adding the next code after than `source lib_dibs`
+
+Debian/Ubuntu or derivatives:
+```bash
 update_packages_debian
 upgrade_packages_debian
 autoremove_packages_debian
@@ -145,7 +173,7 @@ autoremove_packages_debian
 -
 
 Fedora or derivatives:
-```
+```bash
 update_packages_fedora
 upgrade_packages_fedora
 autoremove_packages_fedora
@@ -153,7 +181,7 @@ autoremove_packages_fedora
 -
 
 SuseLinux or derivatives:
-```
+```bash
 update_packages_suselinux
 upgrade_packages_suselinux
 autoremove_packages_suselinux
@@ -161,12 +189,11 @@ autoremove_packages_suselinux
 -
 
 Archlinux or derivatives:
-```
+```bash
 update_packages_archlinux
 upgrade_packages_archlinux
 autoremove_packages_archlinux
 ```
-You must add those functions then of `source lib_dibs`
 
 -
 
