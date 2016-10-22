@@ -158,5 +158,5 @@ if [ "$autoremove_packages" == true ]; then autoremove_packages_debian;autoremov
 fi
 
 if [ "$action" == "end" ]; then
-  echo "Nothing to install or remove..."
+  unset action
 fi
