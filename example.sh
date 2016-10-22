@@ -1,17 +1,17 @@
 #!/bin/bash
-action=install
-sudo=true
-update_packages=true
+action=instal		# The packages will be installed.
+sudo=true		# Require sudo privileges.
+update_packages=true	# Finishing the installation the repositories will be updated.
 
-packages_all=(
+packages_all=( # To all systems
   "curl"
   "gcc"
   )
   
-packages_debian=(
+packages_debian=( # In debian
   "g++"
   )
 
-source lib_dibs
+source lib_dibs # Including the library
 
-echo "Dependences installed!"
+echo "Dependences installed!" # Simple echo :P
