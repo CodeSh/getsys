@@ -1,6 +1,6 @@
 #!/bin/bash
 
-typeset -l OS id_dib sudo update_packages upgrade_packages autoremove_packages
+typeset -l OS id_dib sudo
 OS=$(lsb_release -si)
 
 DEBIAN_DIBS=(
