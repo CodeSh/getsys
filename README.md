@@ -6,7 +6,7 @@ This is a alpha repository (script bash) to get the system and install/remove an
 
 If you have a script and the script require some packages maybe this will be your magic script!
 
-## Getting lib_dibs
+## Getting getsystem script
 You need download getsystem by wget with:
 ```bash
 wget https://raw.githubusercontent.com/CodeSh/Get_System_andInstall/master/getsystem
