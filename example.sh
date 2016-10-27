@@ -12,6 +12,6 @@ packages_debian=( # In debian
   "g++"
   )
 
-source lib_dibs # Including the library
+getsystem # get the system
 
 echo "Dependences installed!" # Simple echo :P
