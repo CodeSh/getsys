@@ -7,9 +7,14 @@ This is a alpha repository (script bash) to get the system and install/remove an
 If you have a script and the script require some packages maybe this will be your magic script!
 
 ## Getting lib_dibs
-You need download lib_dibs by wget with:
+You need download getsystem by wget with:
 ```bash
-wget https://raw.githubusercontent.com/CodeSh/detect-package-by-system/master/lib_dibs
+wget https://raw.githubusercontent.com/CodeSh/Get_System_andInstall/master/getsystem
+```
+
+Or install the script in your system:
+```bash
+sudo make install
 ```
 
 Examples:
@@ -23,10 +28,23 @@ packages_debian=(
 	"firefox"
 	)
 	
-source lib_dibs
+source getsystem
 ```
 
-## ¿Why including lib_dibs?
+If you have the script installed:
+```bash
+sudo=true # This isn't required if you dont need sudo privileges
+action=install
+
+packages_debian=(
+	"curl"
+	"firefox"
+	)
+	
+getsystem
+```
+
+## ¿Why including getsystem?
 Because that is the "library" to detect the system and install the package.
 
 ### action
@@ -158,11 +176,11 @@ upgrade_packages=true
 autoremove_packages=true
 ```
 
-This needs to be put in the first lines before than `source lib_dibs` and the list of packages.
+This needs to be put in the first lines before than `source getsystem` or `getsystem` and the list of packages.
 
 -
 
-Or you can select a system default and add a funcion adding the next code after than `source lib_dibs`
+Or you can select a system default and add a funcion adding the next code after than `source getsystem` or `getsystem`
 
 Debian/Ubuntu or derivatives:
 ```bash
