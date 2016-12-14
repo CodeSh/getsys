@@ -1,13 +1,18 @@
 #!/bin/bash
 
-typeset -l sudo
+typeset -l sudo OS
 if [ -f "/usr/bin/lsb_release" ]; then OS=$(lsb_release -si); else OS=null; fi
+
 DEBIAN_DIBS=(
 	"debian"
 	"ubuntu"
 	"linuxmint"
 	"canaima"
 	"mint"
+	)
+	
+OPENSUSE_DIBS=(
+	"opensuse"
 	)
 
 FEDORA_DIBS=(
@@ -35,6 +40,17 @@ for all in ${!DEBIAN_DIBS[@]}; do
 	if [[ -f "/etc/debian_version" ]]; then
 		$a; exit
 	elif [[ "${OS}" == "${DEBIAN_DIBS[$all]}" ]]; then
+		echo ${OS}; exit
+	fi
+done
+}
+
+dib_opensuse() {
+a="echo opensuse"
+for all in ${!OPENSUSE_DIBS[@]}; do
+	if [[ `cat /etc/os-release | egrep -i "opensuse"` ]]; then
+		$a; exit
+	elif [[ "${OS}" == "${OPENSUSE_DIBS[$all]}" ]]; then
 		echo ${OS}; exit
 	fi
 done
@@ -81,52 +97,72 @@ IS_DEBIAN=$(dib_debian)
 IS_FEDORA=$(dib_fedora)
 IS_SUSELINUX=$(dib_suselinux)
 IS_ARCHLINUX=$(dib_archlinux)
+IS_OPENSUSE=$(dib_archlinux)
+
+if [[ "$no_confirm" == true ]]; then
+   if [ "$IS_DEBIAN" ]; then iq="-y"; fi
+   if [ "$IS_OPENSUSE" ]; then iq="--non-interactive"; fi
+   if [ "$IS_FEDORA" ]; then iq="-y"; fi
+   if [ "$IS_SUSELINUX" ]; then iq="-y"; fi
+   if [ "$IS_ARCHLINUX" ]; then iq="--noconfirm"; fi
+fi
 
 # Debian/Ubuntu or derivatives functions
-function update_packages_debian() { if [ "$IS_DEBIAN" ]; then $prefix apt-get update -y; fi }
-function upgrade_packages_debian() { if [ "$IS_DEBIAN" ]; then $prefix apt-get upgrade -y; fi }
-function autoremove_packages_debian() { if [ "$IS_DEBIAN" ]; then $prefix apt-get autoremove -y; fi }
-# Fedora or drivatives functions
-function update_packages_fedora() { if [ "$IS_FEDORA" ]; then $prefix dnf update -y; fi }
-function upgrade_packages_fedora() { if [ "$IS_FEDORA" ]; then $prefix dnf upgrade -y; fi }
-function autoremove_packages_fedora() { if [ "$IS_FEDORA" ]; then $prefix dnf autoremove -y; fi }
-# SuseLinux or drivatives functions
-function update_packages_suselinux() { if [ "$IS_SUSELINUX" ]; then $prefix aptitude update -y; fi }
-function upgrade_packages_suselinux() { if [ "$IS_SUSELINUX" ]; then $prefix aptitude safe-upgrade -y; fi }
-function autoremove_packages_suselinux() { if [ "$IS_SUSELINUX" ]; then $prefix aptitude full-upgrade -y; fi }
+function update_packages_debian() { if [ "$IS_DEBIAN" ]; then $prefix apt-get update ${iq}; fi }
+function upgrade_packages_debian() { if [ "$IS_DEBIAN" ]; then $prefix apt-get upgrade ${iq}; fi }
+function autoremove_packages_debian() { if [ "$IS_DEBIAN" ]; then $prefix apt-get autoremove ${iq}; fi }
+# openSUSE or derivatives functions
+function update_packages_opensuse() { if [ "$IS_OPENSUSE" ]; then $prefix zypper refresh security; fi }
+function upgrade_packages_opensuse() { if [ "$IS_OPENSUSE" ]; then $prefix zypper up; fi }
+#function autoremove_packages_opensuse() { if [ "$IS_OPENSUSE" ]; then $prefix apt-get autoremove ${iq}; fi }
+# Fedora or derivatives functions
+function update_packages_fedora() { if [ "$IS_FEDORA" ]; then $prefix dnf update ${iq}; fi }
+function upgrade_packages_fedora() { if [ "$IS_FEDORA" ]; then $prefix dnf upgrade ${iq}; fi }
+function autoremove_packages_fedora() { if [ "$IS_FEDORA" ]; then $prefix dnf autoremove ${iq}; fi }
+# SuseLinux or derivatives functions
+function update_packages_suselinux() { if [ "$IS_SUSELINUX" ]; then $prefix aptitude update ${iq}; fi }
+function upgrade_packages_suselinux() { if [ "$IS_SUSELINUX" ]; then $prefix aptitude safe-upgrade ${iq}; fi }
+function autoremove_packages_suselinux() { if [ "$IS_SUSELINUX" ]; then $prefix aptitude full-upgrade ${iq}; fi }
 # ArchLinux or derivatives functions
 function update_packages_archlinux() { if [ "$IS_ARCHLINUX" ]; then $prefix pacman -Sy; fi }
 function upgrade_packages_archlinux() { if [ "$IS_ARCHLINUX" ]; then $prefix pacman -Syu $(pacman -Qq) -Sy; fi }
 function autoremove_packages_archlinux() { if [ "$IS_ARCHLINUX" ]; then $prefix pacman -R $(pacman -Qdtq) -Sy; fi }
-
+   
 if [ "$action" == "install" ]; then
 
 if [ "$IS_DEBIAN" ]; then
   for package in ${!packages_debian[@]}; do
-		$prefix apt-get install ${packages_debian[$package]} -y
+	$prefix apt-get install ${packages_debian[$package]} ${iq}
+  done
+
+elif [ "$IS_OPENSUSE" ]; then
+  for package in ${!packages_opensuse[@]}; do
+	$prefix zypper install ${packages_opensuse[$package]} ${iq}
   done
 
 elif [ "$IS_FEDORA" ]; then
   for package in ${!packages_fedora[@]}; do
-		$prefix dnf install ${packages_fedora[$package]} -y
+	$prefix dnf install ${packages_fedora[$package]} ${iq}
   done
 
 elif [ "$IS_SUSELINUX" ]; then
   for package in ${!packages_suselinux[@]}; do
-		$prefix aptitude install ${packages_suselinux[$package]} -y
+	$prefix aptitude install ${packages_suselinux[$package]} ${iq}
   done
 
 elif [ "$IS_ARCHLINUX" ]; then
   for package in ${!packages_archlinux[@]}; do
-		$prefix pacman -S --noconfirm ${packages_archlinux[$package]}
+	$prefix pacman -S ${iq} ${packages_archlinux[$package]}
   done
 fi
+
 if [ "${packages_all}" ]; then
   for package in ${!packages_all[@]}; do
-  	if [ "$IS_DEBIAN" ]; then $prefix apt-get install ${packages_all[$package]} -y; fi
-	if [ "$IS_FEDORA" ]; then $prefix dnf install ${packages_all[$package]} -y; fi
-	if [ "$IS_SUSELINUX" ]; then $prefix aptitude install ${packages_all[$package]} -y; fi
-	if [ "$IS_ARCHLINUX" ]; then $prefix pacman -S --noconfirm ${packages_all[$package]} -y; fi
+  	if [ "$IS_DEBIAN" ]; then $prefix apt-get install ${packages_all[$package]} ${iq}; fi
+	if [ "$IS_OPENSUSE" ]; then $prefix zypper install ${packages_all[$package]} ${iq}; fi
+	if [ "$IS_FEDORA" ]; then $prefix dnf install ${packages_all[$package]} ${iq}; fi
+	if [ "$IS_SUSELINUX" ]; then $prefix aptitude install ${packages_all[$package]} ${iq}; fi
+	if [ "$IS_ARCHLINUX" ]; then $prefix pacman -S ${iq} ${packages_all[$package]}; fi
   done
 fi
 if [ "$update_packages" == true ]; then
@@ -145,30 +181,37 @@ if [ "$action" == "remove" ]; then
 
 if [ "$IS_DEBIAN" ]; then
   for package in ${!packages_debian[@]}; do
-		$prefix apt-get remove ${packages_debian[$package]} -y
+		$prefix apt-get remove ${packages_debian[$package]} ${iq}
+  done
+
+elif [ "$IS_OPENSUSE" ]; then
+  for package in ${!packages_opensuse[@]}; do
+	$prefix zypper rm ${packages_opensuse[$package]} ${iq}
   done
 
 elif [ "$IS_FEDORA" ]; then
   for package in ${!packages_fedora[@]}; do
-		$prefix dnf remove ${packages_fedora[$package]} -y
+		$prefix dnf remove ${packages_fedora[$package]} ${iq}
   done
 
 elif [ "$IS_SUSELINUX" ]; then
   for package in ${!packages_suselinux[@]}; do
-		$prefix aptitude remove ${packages_suselinux[$package]} -y
+		$prefix aptitude remove ${packages_suselinux[$package]} ${iq}
   done
 
 elif [ "$IS_ARCHLINUX" ]; then
   for package in ${!packages_archlinux[@]}; do
-		$prefix pacman -R --noconfirm ${packages_archlinux[$package]}
+		$prefix pacman -R ${iq} ${packages_archlinux[$package]}
   done
 fi
+
 if [ "${packages_all}" ]; then
   for package in ${!packages_all[@]}; do
-  	if [ "$IS_DEBIAN" ]; then $prefix apt-get remove ${packages_all[$package]} -y; fi
-	if [ "$IS_FEDORA" ]; then $prefix dnf remove ${packages_all[$package]} -y; fi
-	if [ "$IS_SUSELINUX" ]; then $prefix aptitude remove ${packages_all[$package]} -y; fi
-	if [ "$IS_ARCHLINUX" ]; then $prefix pacman -R --noconfirm ${packages_all[$package]} -y; fi
+  	if [ "$IS_DEBIAN" ]; then $prefix apt-get remove ${packages_all[$package]} ${iq}; fi
+	if [ "$IS_OPENSUSE" ]; then $prefix zypper rm ${packages_all[$package]} ${iq}; fi
+	if [ "$IS_FEDORA" ]; then $prefix dnf remove ${packages_all[$package]} ${iq}; fi
+	if [ "$IS_SUSELINUX" ]; then $prefix aptitude remove ${packages_all[$package]} ${iq}; fi
+	if [ "$IS_ARCHLINUX" ]; then $prefix pacman -R ${iq} ${packages_all[$package]}; fi
   done
 fi
 if [ "$update_packages" == true ]; then
