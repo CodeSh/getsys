@@ -9,11 +9,13 @@ If you have a script and the script require some packages maybe this will be you
 ## Getting getsys script
 You need download getsys by wget with:
 ```bash
-wget https://raw.githubusercontent.com/CodeSh/Get_System_andInstall/master/getsys
+wget https://raw.githubusercontent.com/CodeSh/getsys/master/getsys
 ```
 
 Or install the script in your system:
 ```bash
+git clone https://github.com/CodeSh/getsys
+cd getsys
 sudo make install
 ```
 
