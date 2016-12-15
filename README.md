@@ -6,10 +6,10 @@ This is a alpha repository (script bash) to get the system and install/remove an
 
 If you have a script and the script require some packages maybe this will be your magic script!
 
-## Getting getsystem script
-You need download getsystem by wget with:
+## Getting getsys script
+You need download getsys by wget with:
 ```bash
-wget https://raw.githubusercontent.com/CodeSh/Get_System_andInstall/master/getsystem
+wget https://raw.githubusercontent.com/CodeSh/Get_System_andInstall/master/getsys
 ```
 
 Or install the script in your system:
@@ -28,7 +28,7 @@ packages_debian=(
 	"firefox"
 	)
 	
-source getsystem
+source getsys
 ```
 
 If you have the script installed:
@@ -41,10 +41,10 @@ packages_debian=(
 	"firefox"
 	)
 	
-getsystem
+getsys
 ```
 
-## ¿Why including getsystem?
+## ¿Why including getsys?
 Because that is the "library" to detect the system and install the package.
 
 ### action
@@ -176,11 +176,11 @@ upgrade_packages=true
 autoremove_packages=true
 ```
 
-This needs to be put in the first lines before than `source getsystem` or `getsystem` and the list of packages.
+This needs to be put in the first lines before than `source getsys` or `getsys` and the list of packages.
 
 -
 
-Or you can select a system default and add a funcion adding the next code after than `source getsystem` or `getsystem`
+Or you can select a system default and add a funcion adding the next code after than `source getsys` or `getsys`
 
 Debian/Ubuntu or derivatives:
 ```bash
