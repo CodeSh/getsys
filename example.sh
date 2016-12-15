@@ -12,6 +12,6 @@ packages_debian=( # In debian
   "g++"
   )
 
-getsystem # get the system
+source getsys # get the system
 
 echo "Dependences installed!" # Simple echo :P
