@@ -10,7 +10,7 @@ DEBIAN_DIBS=(
 	"canaima"
 	"mint"
 	)
-	
+
 OPENSUSE_DIBS=(
 	"opensuse"
 	)
@@ -91,8 +91,6 @@ for all in ${!ARCHLINUX_DIBS[@]}; do
 done
 }
 
-
-
 IS_DEBIAN=$(dib_debian)
 IS_FEDORA=$(dib_fedora)
 IS_SUSELINUX=$(dib_suselinux)
@@ -127,30 +125,56 @@ function autoremove_packages_suselinux() { if [ "$IS_SUSELINUX" ]; then $prefix 
 function update_packages_archlinux() { if [ "$IS_ARCHLINUX" ]; then $prefix pacman -Sy; fi }
 function upgrade_packages_archlinux() { if [ "$IS_ARCHLINUX" ]; then $prefix pacman -Syu $(pacman -Qq) -Sy; fi }
 function autoremove_packages_archlinux() { if [ "$IS_ARCHLINUX" ]; then $prefix pacman -R $(pacman -Qdtq) -Sy; fi }
-   
+
+function make_text() {
+	declare -i caracteres i
+	caracteres=`echo ${#1}`
+	case $3 in
+	 "left") i=-1 ;;
+	 "right") true ;;
+		*) echo "Parameter #3 invalid"; exit ;;
+	esac
+	for x in `seq 1 $(echo $caracteres)`; do
+		printf "\r%s" "${1:${i}:$caracteres}"
+		 if [[ $3 == "left" ]]; then
+		 	i=$(( $i - 1 ))
+		 else
+		 	i=$(( $i + 1 ))
+		 fi
+		if [[ $2 ]]; then a=$2; else a=0; fi
+		sleep $a
+	done
+	printf "\n"
+}
+
 if [ "$action" == "install" ]; then
 
 if [ "$IS_DEBIAN" ]; then
+	make_text "Installing packages Debian..." "0.06" "left"
   for package in ${!packages_debian[@]}; do
 	$prefix apt-get install ${packages_debian[$package]} ${iq}
   done
 
 elif [ "$IS_OPENSUSE" ]; then
+	make_text "Installing packages openSUSE..." "0.06" "left"
   for package in ${!packages_opensuse[@]}; do
 	$prefix zypper install ${packages_opensuse[$package]} ${iq}
   done
 
 elif [ "$IS_FEDORA" ]; then
+	make_text "Installing packages Fedora..." "0.06" "left"
   for package in ${!packages_fedora[@]}; do
 	$prefix dnf install ${packages_fedora[$package]} ${iq}
   done
 
 elif [ "$IS_SUSELINUX" ]; then
+	make_text "Installing packages SuseLinux..." "0.06" "left"
   for package in ${!packages_suselinux[@]}; do
 	$prefix aptitude install ${packages_suselinux[$package]} ${iq}
   done
 
 elif [ "$IS_ARCHLINUX" ]; then
+	make_text "Installing packages ArchLinux..." "0.06" "left"
   for package in ${!packages_archlinux[@]}; do
 	$prefix pacman -S ${iq} ${packages_archlinux[$package]}
   done
@@ -158,18 +182,20 @@ fi
 
 if [ "${packages_all}" ]; then
   for package in ${!packages_all[@]}; do
-  	if [ "$IS_DEBIAN" ]; then $prefix apt-get install ${packages_all[$package]} ${iq}; fi
-	if [ "$IS_OPENSUSE" ]; then $prefix zypper install ${packages_all[$package]} ${iq}; fi
-	if [ "$IS_FEDORA" ]; then $prefix dnf install ${packages_all[$package]} ${iq}; fi
-	if [ "$IS_SUSELINUX" ]; then $prefix aptitude install ${packages_all[$package]} ${iq}; fi
-	if [ "$IS_ARCHLINUX" ]; then $prefix pacman -S ${iq} ${packages_all[$package]}; fi
+	  if [ "$IS_DEBIAN" ]; then $prefix apt-get install ${packages_all[$package]} ${iq}; fi
+		if [ "$IS_OPENSUSE" ]; then $prefix zypper install ${packages_all[$package]} ${iq}; fi
+		if [ "$IS_FEDORA" ]; then $prefix dnf install ${packages_all[$package]} ${iq}; fi
+		if [ "$IS_SUSELINUX" ]; then $prefix aptitude install ${packages_all[$package]} ${iq}; fi
+		if [ "$IS_ARCHLINUX" ]; then $prefix pacman -S ${iq} ${packages_all[$package]}; fi
   done
 fi
 if [ "$update_packages" == true ]; then
 	update_packages_debian;update_packages_fedora;update_packages_suselinux;update_packages_archlinux
+	update_packages_opensuse
 fi
 if [ "$upgrade_packages" == true ]; then
 	upgrade_packages_debian;upgrade_packages_fedora;upgrade_packages_suselinux;upgrade_packages_archlinux
+	upgrade_packages_opensuse
 fi
 if [ "$autoremove_packages" == true ]; then
 	autoremove_packages_debian;autoremove_packages_fedora;autoremove_packages_suselinux;autoremove_packages_archlinux
@@ -180,26 +206,31 @@ fi
 if [ "$action" == "remove" ]; then
 
 if [ "$IS_DEBIAN" ]; then
+	make_text "Removing packages Debian..." "0.06" "left"
   for package in ${!packages_debian[@]}; do
 		$prefix apt-get remove ${packages_debian[$package]} ${iq}
   done
 
 elif [ "$IS_OPENSUSE" ]; then
+	make_text "Removing packages openSUSE..." "0.06" "left"
   for package in ${!packages_opensuse[@]}; do
 	$prefix zypper rm ${packages_opensuse[$package]} ${iq}
   done
 
 elif [ "$IS_FEDORA" ]; then
+	make_text "Removing packages Fedora..." "0.06" "left"
   for package in ${!packages_fedora[@]}; do
 		$prefix dnf remove ${packages_fedora[$package]} ${iq}
   done
 
 elif [ "$IS_SUSELINUX" ]; then
+	make_text "Removing packages suselinux..." "0.06" "left"
   for package in ${!packages_suselinux[@]}; do
 		$prefix aptitude remove ${packages_suselinux[$package]} ${iq}
   done
 
 elif [ "$IS_ARCHLINUX" ]; then
+	make_text "Removing packages ArchLinux..." "0.06" "left"
   for package in ${!packages_archlinux[@]}; do
 		$prefix pacman -R ${iq} ${packages_archlinux[$package]}
   done
@@ -216,9 +247,11 @@ if [ "${packages_all}" ]; then
 fi
 if [ "$update_packages" == true ]; then
 	update_packages_debian;update_packages_fedora;update_packages_suselinux;update_packages_archlinux
+	update_packages_opensuse
 fi
 if [ "$upgrade_packages" == true ]; then
 	upgrade_packages_debian;upgrade_packages_fedora;upgrade_packages_suselinux;upgrade_packages_archlinux
+	upgrade_packages_suselinux
 fi
 if [ "$autoremove_packages" == true ]; then
 	autoremove_packages_debian;autoremove_packages_fedora;autoremove_packages_suselinux;autoremove_packages_archlinux
@@ -230,4 +263,18 @@ if [ "$action" == "end" ]; then
   unset action
   exit
 fi
+
+case $1 in
+	"-v"|"--version") make_text "Getsys Linux v1.0" "0.1" "left";;
+	"--help")
+	make_text "How can I help you?" "0.06" "left"
+	echo "1- Uses"\
+	"2- Bugs"
+	read opt
+	case $opt in
+		1) echo -e "Getsys is really fast to use, you only will need getsys and your script to install\n"\
+		"you can use packages_all and getsys detect the system and the package manager" ;;
+		2) echo -e "If you have a bug, please report in https://github.com/codesh/getsys [make a issue or pr]"
+	esac
+esac
 exit
