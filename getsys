@@ -1,4 +1,6 @@
 #!/bin/bash
+VERSION=1.0
+STATUS="STABLE"
 
 typeset -l sudo OS
 if [ -f "/usr/bin/lsb_release" ]; then OS=$(lsb_release -si); else OS=null; fi
@@ -97,7 +99,7 @@ IS_SUSELINUX=$(dib_suselinux)
 IS_ARCHLINUX=$(dib_archlinux)
 IS_OPENSUSE=$(dib_archlinux)
 
-if [[ "$no_confirm" == true ]]; then
+if [[ "$confirm" == false ]]; then
    if [ "$IS_DEBIAN" ]; then iq="-y"; fi
    if [ "$IS_OPENSUSE" ]; then iq="--non-interactive"; fi
    if [ "$IS_FEDORA" ]; then iq="-y"; fi
@@ -265,7 +267,7 @@ if [ "$action" == "end" ]; then
 fi
 
 case $1 in
-	"-v"|"--version") make_text "Getsys Linux v1.0" "0.1" "left";;
+	"-v"|"--version") make_text "Getsys Linux v"$VERSION" ["$STATUS"]" "0.1" "left";;
 	"--help")
 	make_text "How can I help you?" "0.06" "left"
 	echo "1- Uses"\
@@ -277,4 +279,3 @@ case $1 in
 		2) echo -e "If you have a bug, please report in https://github.com/codesh/getsys [make a issue or pr]"
 	esac
 esac
-exit
