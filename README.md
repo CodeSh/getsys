@@ -19,6 +19,12 @@ cd getsys
 sudo make install
 ```
 
+Or using getsys without download (something like online :P):
+```bash
+# IMPORTANT: this in the last line of the script
+source <(curl -s https://raw.githubusercontent.com/CodeSh/getsys/master/getsys)
+```
+
 Examples:
 
 ```bash
