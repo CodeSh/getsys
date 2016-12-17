@@ -1,6 +1,6 @@
 ## Detect package by system
 
-This is a alpha repository (script bash) to get the system and install/remove any package detecting the system or dib.
+This is a repository (script bash  v1.0) to get the system and install/remove any package detecting the system or dib.
 
 ## ¿Why use this?
 
