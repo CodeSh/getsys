@@ -265,7 +265,7 @@ elif [ "$IS_ARCHLINUX" ]; then
 			true)
 			$prefix pacman -R ${iq} ${packages_archlinux[$package]} ;;
 			*)
-			printf "The package %s is already installed, skipping (%i)...\n" ${packages_debian[$package]} ${package}
+			printf "The package %s is already uninstalled, skipping (%i)...\n" ${packages_debian[$package]} ${package}
 		esac
   done
 fi
