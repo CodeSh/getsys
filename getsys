@@ -152,9 +152,18 @@ function make_text() {
 if [ "$action" == "install" ]; then
 
 if [ "$IS_DEBIAN" ]; then
-	make_text "Installing packages Debian..." "0.06" "left"
+	make_text "== Installing packages for Debian ==" "0.03" "left"
   for package in ${!packages_debian[@]}; do
-	$prefix apt-get install ${packages_debian[$package]} ${iq}
+			if [[ ! `dpkg -l | cut -d " " -f3 | cut -d ":" -f1 | grep -w "${packages_debian[$package]}"$` ]]; then
+				status=$(echo true)
+			fi
+			case $status in
+				"true")
+				$prefix apt-get install ${packages_debian[$package]} ${iq}
+				;;
+				*)
+				printf "The package %s is already installed, skipping (%i)...\n" ${packages_debian[$package]} ${package}
+			esac
   done
 
 elif [ "$IS_OPENSUSE" ]; then
