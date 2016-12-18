@@ -152,42 +152,49 @@ function make_text() {
 if [ "$action" == "install" ]; then
 
 if [ "$IS_DEBIAN" ]; then
-	make_text "== Installing packages for Debian ==" "0.03" "left"
+	make_text "== Installing [Debian] ==" "0.03" "left"
   for package in ${!packages_debian[@]}; do
 			if [[ ! `dpkg -l | cut -d " " -f3 | cut -d ":" -f1 | grep -w "${packages_debian[$package]}"$` ]]; then
-				status=$(echo true)
+				status=true
 			fi
 			case $status in
-				"true")
-				$prefix apt-get install ${packages_debian[$package]} ${iq}
-				;;
+				true)
+				$prefix apt-get install ${packages_debian[$package]} ${iq} ;;
 				*)
 				printf "The package %s is already installed, skipping (%i)...\n" ${packages_debian[$package]} ${package}
 			esac
   done
 
 elif [ "$IS_OPENSUSE" ]; then
-	make_text "Installing packages openSUSE..." "0.06" "left"
+	make_text "== Installing [openSUSE] ==" "0.03" "left"
   for package in ${!packages_opensuse[@]}; do
-	$prefix zypper install ${packages_opensuse[$package]} ${iq}
+		$prefix zypper install ${packages_opensuse[$package]} ${iq}
   done
 
 elif [ "$IS_FEDORA" ]; then
-	make_text "Installing packages Fedora..." "0.06" "left"
+	make_text "== Installing [Fedora] ==" "0.03" "left"
   for package in ${!packages_fedora[@]}; do
-	$prefix dnf install ${packages_fedora[$package]} ${iq}
+		$prefix dnf install ${packages_fedora[$package]} ${iq}
   done
 
 elif [ "$IS_SUSELINUX" ]; then
-	make_text "Installing packages SuseLinux..." "0.06" "left"
+	make_text "== Installing [suseLinux] ==" "0.03" "left"
   for package in ${!packages_suselinux[@]}; do
-	$prefix aptitude install ${packages_suselinux[$package]} ${iq}
+		$prefix aptitude install ${packages_suselinux[$package]} ${iq}
   done
 
 elif [ "$IS_ARCHLINUX" ]; then
-	make_text "Installing packages ArchLinux..." "0.06" "left"
+	make_text "== Installing [ArchLinux] ==" "0.03" "left"
   for package in ${!packages_archlinux[@]}; do
-	$prefix pacman -S ${iq} ${packages_archlinux[$package]}
+		if [[ ! `pacman -Qs ${packages_archlinux[$package]}` ]];then
+			status=true
+		fi
+		case $status in
+			true)
+			$prefix pacman -S ${iq} ${packages_archlinux[$package]} ;;
+			*)
+			printf "The package %s is already installed, skipping (%i)...\n" ${packages_debian[$package]} ${package}
+		esac
   done
 fi
 
@@ -217,33 +224,49 @@ fi
 if [ "$action" == "remove" ]; then
 
 if [ "$IS_DEBIAN" ]; then
-	make_text "Removing packages Debian..." "0.06" "left"
+	make_text "== Uninstalling [Debian] ==" "0.03" "left"
   for package in ${!packages_debian[@]}; do
-		$prefix apt-get remove ${packages_debian[$package]} ${iq}
+		if [[ `dpkg -l | cut -d " " -f3 | cut -d ":" -f1 | grep -w "${packages_debian[$package]}"$` ]]; then
+			status=true
+		fi
+		case $status in
+			true)
+			$prefix apt-get remove ${packages_debian[$package]} ${iq} ;;
+			*)
+			printf "The package %s is already uninstalled, skipping (%i)...\n" ${packages_debian[$package]} ${package}
+		esac
   done
 
 elif [ "$IS_OPENSUSE" ]; then
-	make_text "Removing packages openSUSE..." "0.06" "left"
+	make_text "== Uninstalling [openSUSE] ==" "0.03" "left"
   for package in ${!packages_opensuse[@]}; do
 	$prefix zypper rm ${packages_opensuse[$package]} ${iq}
   done
 
 elif [ "$IS_FEDORA" ]; then
-	make_text "Removing packages Fedora..." "0.06" "left"
+	make_text "== Uninstalling [Fedora] ==" "0.03" "left"
   for package in ${!packages_fedora[@]}; do
 		$prefix dnf remove ${packages_fedora[$package]} ${iq}
   done
 
 elif [ "$IS_SUSELINUX" ]; then
-	make_text "Removing packages suselinux..." "0.06" "left"
+	make_text "== Uninstalling [suseLinux] ==" "0.03" "left"
   for package in ${!packages_suselinux[@]}; do
 		$prefix aptitude remove ${packages_suselinux[$package]} ${iq}
   done
 
 elif [ "$IS_ARCHLINUX" ]; then
-	make_text "Removing packages ArchLinux..." "0.06" "left"
+	make_text "== Uninstalling [ArchLinux] ==" "0.03" "left"
   for package in ${!packages_archlinux[@]}; do
-		$prefix pacman -R ${iq} ${packages_archlinux[$package]}
+		if [[ `pacman -Qs ${packages_archlinux[$package]}` ]];then
+			status=true
+		fi
+		case $status in
+			true)
+			$prefix pacman -R ${iq} ${packages_archlinux[$package]} ;;
+			*)
+			printf "The package %s is already installed, skipping (%i)...\n" ${packages_debian[$package]} ${package}
+		esac
   done
 fi
 
