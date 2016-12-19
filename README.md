@@ -2,6 +2,16 @@
 
 This is a repository (script bash  v1.0) to get the system and install/remove any package detecting the system or dib.
 
+## Features
+List of features then
+* [x] Will do the installation package by package, if a package doesn't exist getsys will continue installing yet.
+* [x] Compatible with ArchLinux, Debian, Fedora, openSUSE, suseLinux and derivatives.
+* [x] You can make a array with packages for all (will detect the os) or a system  specific.
+* [x] You can add parameters to make a custom installation (update packages, upgrade, sudo, etc).
+* [x] 1 script in bash: the 99% of S.Os are using bash by default.
+* [x] You can use this code without download.
+* [x] Semi-graphical installation.
+
 ## ¿Why use this?
 
 If you have a script and the script require some packages maybe this will be your magic script!
